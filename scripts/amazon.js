@@ -1,4 +1,4 @@
-import {cart, addToCart, calculateCartQuantity} from "../data/cart.js"
+import {addToCart, calculateCartQuantity} from "../data/cart.js"
 import {products} from "../data/products.js"
 import { formatCurrency } from "./utils/money.js"
 
@@ -89,7 +89,7 @@ document.querySelectorAll(`.js-add-to-cart`).forEach(button => {
         const {productId} = button.dataset
 
         addToCart(productId)
-        updateCartQuantity(productId)
+        updateCartQuantity()
         popupAddedMessage(productId)
 
     })
