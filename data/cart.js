@@ -9,6 +9,15 @@ if(!cart){
   }]
 }
 
+export function calculateCartQuantity(){
+  let cartQuantity = 0
+
+  cart.forEach(cartItem => {
+    cartQuantity += cartItem.quantity
+  })
+  return cartQuantity
+}
+
 
 
 function saveToStorage(){
