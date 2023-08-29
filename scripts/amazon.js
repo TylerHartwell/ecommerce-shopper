@@ -1,3 +1,6 @@
+import {cart, addToCart} from "../data/cart.js"
+import {products} from "../data/products.js"
+
 let productsHTML = ''
 
 products.forEach((product)=>{
@@ -53,50 +56,43 @@ products.forEach((product)=>{
     `
 })
 
-const addedToCartTimeouts = {}
+function updateCartQuantity(productId){
+    const cartQuantityEl = document.querySelector('.js-cart-quantity')
+    let cartQuantity = 0
 
+    cart.forEach(cartItem => {
+        cartQuantity += cartItem.quantity
+    })
+
+    cartQuantityEl.textContent = cartQuantity
+}
+
+function popupAddedMessage(productId){
+    const addedToCartEl = document.querySelector(`.js-added-to-cart-${productId}`)
+    const previousTimeoutId = addedToCartTimeouts[productId]
+    
+    addedToCartEl.classList.add("opaque")
+
+    if(previousTimeoutId){
+        clearTimeout(previousTimeoutId)
+    }
+
+    const timeoutId = setTimeout(() => {
+        addedToCartEl.classList.remove("opaque")
+    }, 2000)
+
+    addedToCartTimeouts[productId] = timeoutId
+}
+
+const addedToCartTimeouts = {}
 document.querySelector(`.js-products-grid`).innerHTML = productsHTML
 document.querySelectorAll(`.js-add-to-cart`).forEach(button => {
     button.addEventListener('click', () => {
         const {productId} = button.dataset
-        const cartQuantityEl = document.querySelector('.js-cart-quantity')
-        const addedToCartEl = document.querySelector(`.js-added-to-cart-${productId}`)
-        const quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`)
-        const addQuantity = Number(quantitySelector.value)
-        const previousTimeoutId = addedToCartTimeouts[productId]
-        
-        let matchingItem
-        let cartQuantity = 0
 
-        cart.forEach(item => {
-            if(productId === item.productId){
-                matchingItem = item
-            }
-        })
+        addToCart(productId)
+        updateCartQuantity(productId)
+        popupAddedMessage(productId)
 
-        if(matchingItem){
-            matchingItem.quantity += addQuantity
-        } else {
-            cart.push({productId,
-                quantity: addQuantity
-            })
-        }
-
-        cart.forEach(item => {
-            cartQuantity += item.quantity
-        })
-
-        cartQuantityEl.textContent = cartQuantity
-        addedToCartEl.classList.add("opaque")
-
-        if(previousTimeoutId){
-            clearTimeout(previousTimeoutId)
-        }
-
-        const timeoutId = setTimeout(() => {
-            addedToCartEl.classList.remove("opaque")
-        }, 2000)
-        
-        addedToCartTimeouts[productId] = timeoutId
     })
 })
