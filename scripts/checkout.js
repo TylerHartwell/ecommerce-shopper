@@ -141,10 +141,17 @@ function setupSaveLinks(){
       container.classList.remove('is-editing-quantity')
       const quantityInput = document.querySelector(`.js-quantity-input-${productId}`)
       const newQuantity = Number(quantityInput.value)
-      updateQuantity(productId, newQuantity)
-      updateCheckoutQuantity()
-      const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`)
-      quantityLabel.textContent = newQuantity
+      if(newQuantity > 0 && newQuantity < 1000){
+        updateQuantity(productId, newQuantity)
+        updateCheckoutQuantity()
+        const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`)
+        quantityLabel.textContent = newQuantity
+      }
+      if(newQuantity === 0){
+        removeFromCart(productId)
+        container.remove()
+        updateCheckoutQuantity()
+      }
     })
   })
 }
