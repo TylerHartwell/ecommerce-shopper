@@ -105,11 +105,12 @@ cart.forEach(cartItem => {
 })
 
 document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML
+
 document.querySelectorAll('.js-delete-link').forEach(link => {
   link.addEventListener('click', () => {
-    const productId = link.dataset.productId
-    removeFromCart(productId)
+    const {productId} = link.dataset
     const container = document.querySelector(`.js-cart-item-container-${productId}`)
+    removeFromCart(productId)
     container.remove()
     updateCheckoutQuantity()
   })
@@ -117,7 +118,7 @@ document.querySelectorAll('.js-delete-link').forEach(link => {
 
 document.querySelectorAll('.js-update-link').forEach(link => {
   link.addEventListener('click', () => {
-    const productId = link.dataset.productId
+    const {productId} = link.dataset
     const container = document.querySelector(`.js-cart-item-container-${productId}`)
     container.classList.add('is-editing-quantity')
   })
@@ -125,7 +126,7 @@ document.querySelectorAll('.js-update-link').forEach(link => {
 
 document.querySelectorAll('.js-save-link').forEach(link => {
   link.addEventListener('click', () => {
-    const productId = link.dataset.productId
+    const {productId} = link.dataset
     const container = document.querySelector(`.js-cart-item-container-${productId}`)
     container.classList.remove('is-editing-quantity')
     const quantityInput = document.querySelector(`.js-quantity-input-${productId}`)
