@@ -7,6 +7,7 @@ displayCartSummaryHTML()
 setupDeleteLinks()
 setupUpdateLinks()
 setupSaveLinks()
+setupPressEnterInputSave()
 
 function updateCheckoutQuantity(){
   const checkoutQuantityEl = document.querySelector('.js-checkout-quantity')
@@ -49,7 +50,7 @@ function displayCartSummaryHTML(){
               <span class="update-quantity-link link-primary js-update-link" data-product-id="${matchingProduct.id}">
                 Update
               </span>
-              <input class="quantity-input js-quantity-input-${productId}">
+              <input class="quantity-input js-quantity-input" data-product-id="${matchingProduct.id}">
               <span class="save-quantity-link link-primary js-save-link" data-product-id="${matchingProduct.id}">
                 Save
               </span>
@@ -139,7 +140,7 @@ function setupSaveLinks(){
       const {productId} = link.dataset
       const container = document.querySelector(`.js-cart-item-container-${productId}`)
       container.classList.remove('is-editing-quantity')
-      const quantityInput = document.querySelector(`.js-quantity-input-${productId}`)
+      const quantityInput = document.querySelector(`.js-quantity-input[data-product-id="${productId}"]`)
       const newQuantity = Number(quantityInput.value)
       if(newQuantity > 0 && newQuantity < 1000){
         updateQuantity(productId, newQuantity)
@@ -151,6 +152,18 @@ function setupSaveLinks(){
         removeFromCart(productId)
         container.remove()
         updateCheckoutQuantity()
+      }
+    })
+  })
+}
+
+function setupPressEnterInputSave(){
+  document.querySelectorAll('.js-quantity-input').forEach(input => {
+    input.addEventListener('keypress', e => {
+      const {productId} = input.dataset
+      if(e.key === "Enter"){
+        e.preventDefault()
+        document.querySelector(`.js-save-link[data-product-id="${productId}"]`).click()
       }
     })
   })
