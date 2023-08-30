@@ -50,3 +50,11 @@ export function updateQuantity(productId, newQuantity){
   })
   saveToStorage()
 }
+
+export function getMatchingProduct(productId){
+
+}
+
+export function calculateItemSubtotal(){
+
+}
