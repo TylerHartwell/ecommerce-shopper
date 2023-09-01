@@ -1,4 +1,6 @@
 export let cart = JSON.parse(localStorage.getItem('cart'))
+import {products} from "./products.js"
+import {formatCurrency} from "../scripts/utils/money.js"
 
 if(!cart) {
   cart = []
@@ -51,10 +53,20 @@ export function updateQuantity(productId, newQuantity){
   saveToStorage()
 }
 
-export function getMatchingProduct(productId){
-
+export function returnMatchingProductFromId(productId){
+    let matchingProduct
+    products.forEach(product => {
+      if(product.id === productId) {
+        matchingProduct = product
+      }
+    })
+  return matchingProduct
 }
 
-export function calculateItemSubtotal(){
-
+export function calculateOrderSubtotal(){
+  let subtotal = 0
+  cart.forEach(cartItem => {
+    subtotal += cartItem.quantity * returnMatchingProductFromId(cartItem.productId).priceCents
+  })
+  return formatCurrency(subtotal)
 }

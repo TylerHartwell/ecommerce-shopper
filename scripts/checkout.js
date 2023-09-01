@@ -1,9 +1,9 @@
-import {updateQuantity, calculateCartQuantity, cart, removeFromCart} from "../data/cart.js"
+import {updateQuantity, calculateCartQuantity, cart, removeFromCart, calculateOrderSubtotal} from "../data/cart.js"
 import { products } from "../data/products.js"
 import { formatCurrency } from "./utils/money.js"
 
 updateCheckoutQuantity()
-displayCartSummaryHTML()
+displayCartCardsHTML()
 displayPaymentSummaryHTML()
 setupDeleteLinks()
 setupUpdateLinks()
@@ -15,8 +15,8 @@ function updateCheckoutQuantity(){
   checkoutQuantityEl.textContent = calculateCartQuantity()
 }
 
-function displayCartSummaryHTML(){
-  let cartSummaryHTML = ''
+function displayCartCardsHTML(){
+  let cartCardsHTML = ''
   cart.forEach(cartItem => {
     const productId = cartItem.productId
     let matchingProduct
@@ -27,7 +27,7 @@ function displayCartSummaryHTML(){
       }
     })
   
-    cartSummaryHTML += `
+    cartCardsHTML += `
       <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
         <div class="delivery-date">
           Delivery date: Tuesday, June 21
@@ -110,7 +110,7 @@ function displayCartSummaryHTML(){
     `
   })
   
-  document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML
+  document.querySelector('.js-order-summary').innerHTML = cartCardsHTML
 }
 
 function displayPaymentSummaryHTML(){
@@ -121,7 +121,7 @@ function displayPaymentSummaryHTML(){
 
     <div class="payment-summary-row">
       <div>Items (${calculateCartQuantity()}):</div>
-      <div class="payment-summary-money">$42.75</div>
+      <div class="payment-summary-money js-payment-summary-subtotal">$${calculateOrderSubtotal()}</div>
     </div>
 
     <div class="payment-summary-row">
@@ -151,6 +151,11 @@ function displayPaymentSummaryHTML(){
   document.querySelector('.js-payment-summary').innerHTML = paymentSummaryHTML
 }
 
+function updatePaymentSummary(){
+  const paymentSummarySubtotalEl = document.querySelector('.js-payment-summary-subtotal')
+  paymentSummarySubtotalEl.textContent = `${calculateOrderSubtotal()}`
+}
+
 function setupDeleteLinks(){
   document.querySelectorAll('.js-delete-link').forEach(link => {
     link.addEventListener('click', () => {
@@ -159,6 +164,7 @@ function setupDeleteLinks(){
       removeFromCart(productId)
       container.remove()
       updateCheckoutQuantity()
+      updatePaymentSummary()
     })
   })
 }
@@ -184,6 +190,7 @@ function setupSaveLinks(){
       if(newQuantity > 0 && newQuantity < 1000){
         updateQuantity(productId, newQuantity)
         updateCheckoutQuantity()
+        updatePaymentSummary()
         const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`)
         quantityLabel.textContent = newQuantity
       }
@@ -191,6 +198,7 @@ function setupSaveLinks(){
         removeFromCart(productId)
         container.remove()
         updateCheckoutQuantity()
+        updatePaymentSummary()
       }
     })
   })
