@@ -1,6 +1,6 @@
-import {updateQuantity, calculateCartQuantity, cart, removeFromCart, calculateOrderSubtotal} from "../data/cart.js"
+import {updateQuantity, calculateCartQuantity, cart, removeFromCart, calculateOrderSubtotal, updateShipping} from "../data/cart.js"
 import { products } from "../data/products.js"
-import { calculateShippingCost, formatCurrency } from "./utils/money.js"
+import { calculateShippingCost, calculateTotalBeforeTax, formatCurrency } from "./utils/money.js"
 
 updateCheckoutQuantity()
 displayCartCardsHTML()
@@ -67,10 +67,10 @@ function displayCartCardsHTML(){
               Choose a delivery option:
             </div>
             <div class="delivery-option">
-              <input type="radio" checked
+              <input type="radio" ${cartItem.priority === "low" ? "checked" : ""}
                 class="delivery-option-input js-delivery-option-input"
                 name="delivery-option-${matchingProduct.id}"
-                value="low">
+                value="low" data-product-id="${matchingProduct.id}">
               <div>
                 <div class="delivery-option-date">
                   Tuesday, June 21
@@ -81,10 +81,10 @@ function displayCartCardsHTML(){
               </div>
             </div>
             <div class="delivery-option">
-              <input type="radio"
+              <input type="radio" ${cartItem.priority === "medium" ? "checked" : ""}
                 class="delivery-option-input js-delivery-option-input"
                 name="delivery-option-${matchingProduct.id}"
-                value="medium">
+                value="medium" data-product-id="${matchingProduct.id}">
               <div>
                 <div class="delivery-option-date">
                   Wednesday, June 15
@@ -95,10 +95,10 @@ function displayCartCardsHTML(){
               </div>
             </div>
             <div class="delivery-option">
-              <input type="radio"
+              <input type="radio" ${cartItem.priority === "high" ? "checked" : ""}
                 class="delivery-option-input js-delivery-option-input"
                 name="delivery-option-${matchingProduct.id}"
-                value="high">
+                value="high" data-product-id="${matchingProduct.id}">
               <div>
                 <div class="delivery-option-date">
                   Monday, June 13
@@ -124,10 +124,13 @@ function calculateShippingAndHandlingTotal(){
       totalCents += calculateShippingCost(option.value)
     }
   })
-  return formatCurrency(totalCents)
+  return totalCents
 }
 
 function displayPaymentSummaryHTML(){
+  const subtotal = calculateOrderSubtotal()
+  const shippingAndHandling = calculateShippingAndHandlingTotal()
+  const preTaxTotal = calculateTotalBeforeTax(subtotal, shippingAndHandling)
   let paymentSummaryHTML = `
     <div class="payment-summary-title">
       Order Summary
@@ -135,17 +138,17 @@ function displayPaymentSummaryHTML(){
 
     <div class="payment-summary-row">
       <div>Items (${calculateCartQuantity()}):</div>
-      <div class="payment-summary-money js-payment-summary-subtotal">$${calculateOrderSubtotal()}</div>
+      <div class="payment-summary-money js-payment-summary-subtotal">$${formatCurrency(subtotal)}</div>
     </div>
 
     <div class="payment-summary-row">
       <div>Shipping &amp; handling:</div>
-      <div class="payment-summary-money js-shipping-and-handling-total">$${calculateShippingAndHandlingTotal()}</div>
+      <div class="payment-summary-money js-shipping-and-handling-total">$${formatCurrency(shippingAndHandling)}</div>
     </div>
 
     <div class="payment-summary-row subtotal-row">
       <div>Total before tax:</div>
-      <div class="payment-summary-money">$47.74</div>
+      <div class="payment-summary-money js-pre-tax-total">$${formatCurrency(preTaxTotal)}</div>
     </div>
 
     <div class="payment-summary-row">
@@ -166,16 +169,22 @@ function displayPaymentSummaryHTML(){
 }
 
 function updatePaymentSummary(){
+  const subtotal = calculateOrderSubtotal()
+  const shippingAndHandling = calculateShippingAndHandlingTotal()
   const paymentSummarySubtotalEl = document.querySelector('.js-payment-summary-subtotal')
-  paymentSummarySubtotalEl.textContent = `$${calculateOrderSubtotal()}`
+  paymentSummarySubtotalEl.textContent = `$${formatCurrency(calculateOrderSubtotal())}`
   const shippingAndHandlingTotalEl = document.querySelector('.js-shipping-and-handling-total')
-  shippingAndHandlingTotalEl.textContent = `$${calculateShippingAndHandlingTotal()}`
+  shippingAndHandlingTotalEl.textContent = `$${formatCurrency(calculateShippingAndHandlingTotal())}`
+  const preTaxTotalEl = document.querySelector('.js-pre-tax-total')
+  preTaxTotalEl.textContent = `$${formatCurrency(calculateTotalBeforeTax(subtotal, shippingAndHandling))}`
 }
 
 function setupShippingLinks(){
   document.querySelectorAll('.js-delivery-option-input').forEach(link => {
     link.addEventListener('click', () => {
+      const {productId} = link.dataset
       updatePaymentSummary()
+      updateShipping(productId, link.value)
     })
   })
 }

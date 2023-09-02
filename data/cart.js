@@ -33,7 +33,8 @@ export function addToCart(productId){
   cart.push(
     {
       productId,
-      quantity: addQuantity
+      quantity: addQuantity,
+      priority: "low"
     }
   )
   saveToStorage()
@@ -48,6 +49,15 @@ export function updateQuantity(productId, newQuantity){
   cart.forEach(cartItem => {
     if(cartItem.productId === productId){
       cartItem.quantity = newQuantity
+    }
+  })
+  saveToStorage()
+}
+
+export function updateShipping(productId, priority){
+  cart.forEach(cartItem => {
+    if(cartItem.productId === productId){
+      cartItem.priority = priority
     }
   })
   saveToStorage()
@@ -68,5 +78,5 @@ export function calculateOrderSubtotal(){
   cart.forEach(cartItem => {
     subtotal += cartItem.quantity * returnMatchingProductFromId(cartItem.productId).priceCents
   })
-  return formatCurrency(subtotal)
+  return subtotal
 }

@@ -12,3 +12,8 @@ export function calculateShippingCost(shippingPriority){
   if(shippingPriority === "medium") return shippingCostCentsMedium
   return shippingCostCentsLow
 }
+
+export function calculateTotalBeforeTax(subtotal, shippingTotal){
+  const totalPreTax = subtotal + shippingTotal
+  return totalPreTax
+}
