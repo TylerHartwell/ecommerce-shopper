@@ -9,6 +9,7 @@ setupDeleteLinks()
 setupUpdateLinks()
 setupSaveLinks()
 setupPressEnterInputSave()
+setupShippingLinks()
 
 function updateCheckoutQuantity(){
   const checkoutQuantityEl = document.querySelector('.js-checkout-quantity')
@@ -67,7 +68,7 @@ function displayCartCardsHTML(){
             </div>
             <div class="delivery-option">
               <input type="radio" checked
-                class="delivery-option-input"
+                class="delivery-option-input js-delivery-option-input"
                 name="delivery-option-${matchingProduct.id}"
                 value="low">
               <div>
@@ -81,7 +82,7 @@ function displayCartCardsHTML(){
             </div>
             <div class="delivery-option">
               <input type="radio"
-                class="delivery-option-input"
+                class="delivery-option-input js-delivery-option-input"
                 name="delivery-option-${matchingProduct.id}"
                 value="medium">
               <div>
@@ -95,7 +96,7 @@ function displayCartCardsHTML(){
             </div>
             <div class="delivery-option">
               <input type="radio"
-                class="delivery-option-input"
+                class="delivery-option-input js-delivery-option-input"
                 name="delivery-option-${matchingProduct.id}"
                 value="high">
               <div>
@@ -116,6 +117,16 @@ function displayCartCardsHTML(){
   document.querySelector('.js-order-summary').innerHTML = cartCardsHTML
 }
 
+function calculateShippingAndHandlingTotal(){
+  let totalCents = 0
+  document.querySelectorAll('.js-delivery-option-input').forEach(option => {
+    if(option.checked){
+      totalCents += calculateShippingCost(option.value)
+    }
+  })
+  return formatCurrency(totalCents)
+}
+
 function displayPaymentSummaryHTML(){
   let paymentSummaryHTML = `
     <div class="payment-summary-title">
@@ -129,7 +140,7 @@ function displayPaymentSummaryHTML(){
 
     <div class="payment-summary-row">
       <div>Shipping &amp; handling:</div>
-      <div class="payment-summary-money">$4.99</div>
+      <div class="payment-summary-money js-shipping-and-handling-total">$${calculateShippingAndHandlingTotal()}</div>
     </div>
 
     <div class="payment-summary-row subtotal-row">
@@ -156,7 +167,17 @@ function displayPaymentSummaryHTML(){
 
 function updatePaymentSummary(){
   const paymentSummarySubtotalEl = document.querySelector('.js-payment-summary-subtotal')
-  paymentSummarySubtotalEl.textContent = `${calculateOrderSubtotal()}`
+  paymentSummarySubtotalEl.textContent = `$${calculateOrderSubtotal()}`
+  const shippingAndHandlingTotalEl = document.querySelector('.js-shipping-and-handling-total')
+  shippingAndHandlingTotalEl.textContent = `$${calculateShippingAndHandlingTotal()}`
+}
+
+function setupShippingLinks(){
+  document.querySelectorAll('.js-delivery-option-input').forEach(link => {
+    link.addEventListener('click', () => {
+      updatePaymentSummary()
+    })
+  })
 }
 
 function setupDeleteLinks(){
