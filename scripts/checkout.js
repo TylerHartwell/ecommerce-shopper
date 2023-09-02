@@ -1,8 +1,8 @@
-import {updateQuantity, calculateCartQuantity, cart, removeFromCart, calculateOrderSubtotal, updateShipping} from "../data/cart.js"
+import {updateQuantity, calculateTotalCartQuantity, cart, removeFromCart, calculateOrderSubtotal, updateShipping} from "../data/cart.js"
 import { products } from "../data/products.js"
-import { calculateShippingCost, calculateTotalBeforeTax, formatCurrency } from "./utils/money.js"
+import { calculateShippingCost, calculateTotalBeforeTax, formatCurrency, formatTaxToPercentValue, calculateTax, calculateOrderTotal } from "./utils/money.js"
 
-updateCheckoutQuantity()
+refreshCheckoutQuantity()
 displayCartCardsHTML()
 displayPaymentSummaryHTML()
 setupDeleteLinks()
@@ -11,9 +11,9 @@ setupSaveLinks()
 setupPressEnterInputSave()
 setupShippingLinks()
 
-function updateCheckoutQuantity(){
+function refreshCheckoutQuantity(){
   const checkoutQuantityEl = document.querySelector('.js-checkout-quantity')
-  checkoutQuantityEl.textContent = calculateCartQuantity()
+  checkoutQuantityEl.textContent = calculateTotalCartQuantity()
 }
 
 function displayCartCardsHTML(){
@@ -117,6 +117,72 @@ function displayCartCardsHTML(){
   document.querySelector('.js-order-summary').innerHTML = cartCardsHTML
 }
 
+function displayPaymentSummaryHTML(){
+  const subtotal = calculateOrderSubtotal()
+  const shippingTotal = calculateShippingAndHandlingTotal()
+  const totalBeforeTax = calculateTotalBeforeTax(subtotal, shippingTotal)
+  const tax = calculateTax(totalBeforeTax)
+  const orderTotal = calculateOrderTotal(totalBeforeTax)
+  let paymentSummaryHTML = `
+    <div class="payment-summary-title">
+      Order Summary
+    </div>
+
+    <div class="payment-summary-row">
+      <div>Items (${calculateTotalCartQuantity()}):</div>
+      <div class="payment-summary-money js-payment-summary-subtotal"></div>
+    </div>
+
+    <div class="payment-summary-row">
+      <div>Shipping &amp; handling:</div>
+      <div class="payment-summary-money js-shipping-and-handling-total"></div>
+    </div>
+
+    <div class="payment-summary-row subtotal-row">
+      <div>Total before tax:</div>
+      <div class="payment-summary-money js-pre-tax-total"></div>
+    </div>
+
+    <div class="payment-summary-row">
+      <div>Estimated tax (${formatTaxToPercentValue()}%):</div>
+      <div class="payment-summary-money js-tax"></div>
+    </div>
+
+    <div class="payment-summary-row total-row">
+      <div>Order total:</div>
+      <div class="payment-summary-money js-order-total"></div>
+    </div>
+
+    <button class="place-order-button button-primary">
+      Place your order
+    </button>
+  `
+  document.querySelector('.js-payment-summary').innerHTML = paymentSummaryHTML
+  refreshPaymentSummary()
+}
+
+function refreshPaymentSummary(){
+  const subtotal = calculateOrderSubtotal()
+  const subtotalEl = document.querySelector('.js-payment-summary-subtotal')
+  subtotalEl.textContent = `$${formatCurrency(subtotal)}`
+
+  const shippingTotal = calculateShippingAndHandlingTotal()
+  const shippingTotalEl = document.querySelector('.js-shipping-and-handling-total')
+  shippingTotalEl.textContent = `$${formatCurrency(shippingTotal)}`
+
+  const totalBeforeTax = calculateTotalBeforeTax(subtotal, shippingTotal)
+  const totalBeforeTaxEl = document.querySelector('.js-pre-tax-total')
+  totalBeforeTaxEl.textContent = `$${formatCurrency(totalBeforeTax)}`
+
+  const tax = calculateTax(totalBeforeTax)
+  const taxEl = document.querySelector('.js-tax')
+  taxEl.textContent = `$${formatCurrency(tax)}`
+
+  const orderTotal = calculateOrderTotal(totalBeforeTax)
+  const orderTotalEl = document.querySelector('.js-order-total')
+  orderTotalEl.textContent = `$${formatCurrency(orderTotal)}`
+}
+
 function calculateShippingAndHandlingTotal(){
   let totalCents = 0
   document.querySelectorAll('.js-delivery-option-input').forEach(option => {
@@ -127,63 +193,11 @@ function calculateShippingAndHandlingTotal(){
   return totalCents
 }
 
-function displayPaymentSummaryHTML(){
-  const subtotal = calculateOrderSubtotal()
-  const shippingAndHandling = calculateShippingAndHandlingTotal()
-  const preTaxTotal = calculateTotalBeforeTax(subtotal, shippingAndHandling)
-  let paymentSummaryHTML = `
-    <div class="payment-summary-title">
-      Order Summary
-    </div>
-
-    <div class="payment-summary-row">
-      <div>Items (${calculateCartQuantity()}):</div>
-      <div class="payment-summary-money js-payment-summary-subtotal">$${formatCurrency(subtotal)}</div>
-    </div>
-
-    <div class="payment-summary-row">
-      <div>Shipping &amp; handling:</div>
-      <div class="payment-summary-money js-shipping-and-handling-total">$${formatCurrency(shippingAndHandling)}</div>
-    </div>
-
-    <div class="payment-summary-row subtotal-row">
-      <div>Total before tax:</div>
-      <div class="payment-summary-money js-pre-tax-total">$${formatCurrency(preTaxTotal)}</div>
-    </div>
-
-    <div class="payment-summary-row">
-      <div>Estimated tax (10%):</div>
-      <div class="payment-summary-money">$4.77</div>
-    </div>
-
-    <div class="payment-summary-row total-row">
-      <div>Order total:</div>
-      <div class="payment-summary-money">$52.51</div>
-    </div>
-
-    <button class="place-order-button button-primary">
-      Place your order
-    </button>
-  `
-  document.querySelector('.js-payment-summary').innerHTML = paymentSummaryHTML
-}
-
-function updatePaymentSummary(){
-  const subtotal = calculateOrderSubtotal()
-  const shippingAndHandling = calculateShippingAndHandlingTotal()
-  const paymentSummarySubtotalEl = document.querySelector('.js-payment-summary-subtotal')
-  paymentSummarySubtotalEl.textContent = `$${formatCurrency(calculateOrderSubtotal())}`
-  const shippingAndHandlingTotalEl = document.querySelector('.js-shipping-and-handling-total')
-  shippingAndHandlingTotalEl.textContent = `$${formatCurrency(calculateShippingAndHandlingTotal())}`
-  const preTaxTotalEl = document.querySelector('.js-pre-tax-total')
-  preTaxTotalEl.textContent = `$${formatCurrency(calculateTotalBeforeTax(subtotal, shippingAndHandling))}`
-}
-
 function setupShippingLinks(){
   document.querySelectorAll('.js-delivery-option-input').forEach(link => {
     link.addEventListener('click', () => {
       const {productId} = link.dataset
-      updatePaymentSummary()
+      refreshPaymentSummary()
       updateShipping(productId, link.value)
     })
   })
@@ -196,8 +210,8 @@ function setupDeleteLinks(){
       const container = document.querySelector(`.js-cart-item-container-${productId}`)
       removeFromCart(productId)
       container.remove()
-      updateCheckoutQuantity()
-      updatePaymentSummary()
+      refreshCheckoutQuantity()
+      refreshPaymentSummary()
     })
   })
 }
@@ -222,16 +236,16 @@ function setupSaveLinks(){
       const newQuantity = Number(quantityInput.value)
       if(newQuantity > 0 && newQuantity < 1000){
         updateQuantity(productId, newQuantity)
-        updateCheckoutQuantity()
-        updatePaymentSummary()
+        refreshCheckoutQuantity()
+        refreshPaymentSummary()
         const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`)
         quantityLabel.textContent = newQuantity
       }
       if(newQuantity === 0){
         removeFromCart(productId)
         container.remove()
-        updateCheckoutQuantity()
-        updatePaymentSummary()
+        refreshCheckoutQuantity()
+        refreshPaymentSummary()
       }
     })
   })

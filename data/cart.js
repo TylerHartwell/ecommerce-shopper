@@ -1,6 +1,5 @@
 export let cart = JSON.parse(localStorage.getItem('cart'))
 import {products} from "./products.js"
-import {formatCurrency} from "../scripts/utils/money.js"
 
 if(!cart) {
   cart = []
@@ -11,7 +10,7 @@ function saveToStorage(){
   localStorage.setItem('cart', JSON.stringify(cart))
 }
 
-export function calculateCartQuantity(){
+export function calculateTotalCartQuantity(){
   let cartQuantity = 0
   cart.forEach(cartItem => {
     cartQuantity += cartItem.quantity

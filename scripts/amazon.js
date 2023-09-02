@@ -1,16 +1,16 @@
-import {addToCart, calculateCartQuantity} from "../data/cart.js"
+import {addToCart, calculateTotalCartQuantity} from "../data/cart.js"
 import {products} from "../data/products.js"
 import {formatCurrency} from "./utils/money.js"
 
 const addedToCartTimeouts = {}
 
-updateCartQuantity()
+refreshCartQuantity()
 displayProductsHTML()
 setupAddToCartButtons()
 
-function updateCartQuantity(){
+function refreshCartQuantity(){
     const cartQuantityEl = document.querySelector('.js-cart-quantity')
-    cartQuantityEl.textContent = calculateCartQuantity()
+    cartQuantityEl.textContent = calculateTotalCartQuantity()
 }
 
 function displayProductsHTML(){
@@ -75,7 +75,7 @@ function setupAddToCartButtons(){
         button.addEventListener('click', () => {
             const {productId} = button.dataset
             addToCart(productId)
-            updateCartQuantity()
+            refreshCartQuantity()
             popupAddedMessage(productId)
         })
     })
