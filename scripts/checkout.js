@@ -66,7 +66,7 @@ function displayCartCardsHTML(){
             <div class="delivery-options-title">
               Choose a delivery option:
             </div>
-            <div class="delivery-option">
+            <div class="delivery-option js-delivery-option-container">
               <input type="radio" ${cartItem.priority === "low" ? "checked" : ""}
                 class="delivery-option-input js-delivery-option-input"
                 name="delivery-option-${matchingProduct.id}"
@@ -80,7 +80,7 @@ function displayCartCardsHTML(){
                 </div>
               </div>
             </div>
-            <div class="delivery-option">
+            <div class="delivery-option js-delivery-option-container">
               <input type="radio" ${cartItem.priority === "medium" ? "checked" : ""}
                 class="delivery-option-input js-delivery-option-input"
                 name="delivery-option-${matchingProduct.id}"
@@ -94,7 +94,7 @@ function displayCartCardsHTML(){
                 </div>
               </div>
             </div>
-            <div class="delivery-option">
+            <div class="delivery-option js-delivery-option-container">
               <input type="radio" ${cartItem.priority === "high" ? "checked" : ""}
                 class="delivery-option-input js-delivery-option-input"
                 name="delivery-option-${matchingProduct.id}"
@@ -194,11 +194,13 @@ function calculateShippingAndHandlingTotal(){
 }
 
 function setupShippingLinks(){
-  document.querySelectorAll('.js-delivery-option-input').forEach(link => {
+  document.querySelectorAll('.js-delivery-option-container').forEach(link => {
     link.addEventListener('click', () => {
-      const {productId} = link.dataset
+      const radioEl = link.querySelector('.js-delivery-option-input')
+      radioEl.checked = true
+      const {productId} = radioEl.dataset
       refreshPaymentSummary()
-      updateShipping(productId, link.value)
+      updateShipping(productId, radioEl.value)
     })
   })
 }
