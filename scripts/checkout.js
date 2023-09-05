@@ -118,11 +118,7 @@ function displayCartCardsHTML(){
 }
 
 function displayPaymentSummaryHTML(){
-  const subtotal = calculateOrderSubtotal()
-  const shippingTotal = calculateShippingAndHandlingTotal()
-  const totalBeforeTax = calculateTotalBeforeTax(subtotal, shippingTotal)
-  const tax = calculateTax(totalBeforeTax)
-  const orderTotal = calculateOrderTotal(totalBeforeTax)
+
   let paymentSummaryHTML = `
     <div class="payment-summary-title">
       Order Summary
