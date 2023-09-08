@@ -149,7 +149,7 @@ function displayPaymentSummaryHTML(){
       <div class="payment-summary-money js-order-total"></div>
     </div>
 
-    <button class="place-order-button button-primary">
+    <button class="place-order-button button-primary js-place-order-button">
       Place your order
     </button>
   `
@@ -258,5 +258,13 @@ function setupPressEnterInputSave(){
         document.querySelector(`.js-save-link[data-product-id="${productId}"]`).click()
       }
     })
+  })
+}
+
+function setupPlaceOrderButton(){
+  document.querySelector('.js-place-order-button').addEventListener('click', () => {
+    console.log("fun")
+    //addToOrders(cart)
+    //location.href="./orders.html"
   })
 }
