@@ -11,6 +11,7 @@ function saveToStorage(){
 }
 
 export function addToOrders(cart){
+  if(cart.length < 1) return
   orders.push(
     {
       cart,

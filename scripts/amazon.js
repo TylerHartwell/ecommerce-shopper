@@ -4,7 +4,7 @@ import {formatCurrency} from "./utils/money.js"
 
 const addedToCartTimeouts = {}
 
-refreshCartQuantity('.js-cart-quantity')
+refreshCartQuantity()
 displayProductsHTML()
 setupAddToCartButtons()
 
@@ -70,7 +70,7 @@ function setupAddToCartButtons(){
         button.addEventListener('click', () => {
             const {productId} = button.dataset
             addToCart(productId)
-            refreshCartQuantity('.js-cart-quantity')
+            refreshCartQuantity()
             popupAddedMessage(productId)
         })
     })

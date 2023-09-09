@@ -5,7 +5,7 @@ import { products } from "../data/products.js"
 import { calculateShippingCost, calculateTotalBeforeTax, formatCurrency, formatTaxToPercentValue, calculateTax, calculateOrderTotal } from "./utils/money.js"
 import { addToOrders } from "../data/orders.js"
 
-refreshCartQuantity('.js-checkout-quantity')
+refreshCartQuantity()
 displayCartCardsHTML()
 displayPaymentSummaryHTML()
 setupDeleteLinks()
@@ -125,7 +125,7 @@ function displayPaymentSummaryHTML(){
     </div>
 
     <div class="payment-summary-row">
-      <div>Items (${calculateTotalCartQuantity()}):</div>
+      <div>Items (<span class="js-cart-quantity">${calculateTotalCartQuantity()}</span>):</div>
       <div class="payment-summary-money js-payment-summary-subtotal"></div>
     </div>
 
@@ -208,7 +208,7 @@ function setupDeleteLinks(){
       const container = document.querySelector(`.js-cart-item-container-${productId}`)
       removeFromCart(productId)
       container.remove()
-      refreshCartQuantity('.js-checkout-quantity')
+      refreshCartQuantity()
       refreshPaymentSummary()
     })
   })
@@ -242,7 +242,7 @@ function setupSaveLinks(){
       if(newQuantity === 0){
         removeFromCart(productId)
         container.remove()
-        refreshCartQuantity('.js-checkout-quantity')
+        refreshCartQuantity()
         refreshPaymentSummary()
       }
     })

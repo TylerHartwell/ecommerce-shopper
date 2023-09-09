@@ -3,7 +3,7 @@ import { orders } from "../data/orders.js"
 import { products } from "../data/products.js"
 
 
-refreshCartQuantity('.js-cart-quantity')
+refreshCartQuantity()
 displayOrdersHTML()
 
 function displayOrdersHTML() {

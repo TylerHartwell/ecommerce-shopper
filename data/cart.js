@@ -10,9 +10,11 @@ function saveToStorage(){
   localStorage.setItem('cart', JSON.stringify(cart))
 }
 
-export function refreshCartQuantity(selector){
-  const cartQuantityEl = document.querySelector(selector)
-  cartQuantityEl.textContent = calculateTotalCartQuantity()
+export function refreshCartQuantity(){
+  document.querySelectorAll(".js-cart-quantity").forEach(cartQtyEl => {
+    const newCartQty = calculateTotalCartQuantity()
+    cartQtyEl.textContent = newCartQty
+  })
 }
 
 export function calculateTotalCartQuantity(){
