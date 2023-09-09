@@ -1,8 +1,9 @@
-import {updateQuantity, calculateTotalCartQuantity, cart, removeFromCart, calculateOrderSubtotal, updateShipping} from "../data/cart.js"
+import {updateQuantity, calculateTotalCartQuantity, cart, removeFromCart, calculateOrderSubtotal, updateShipping, refreshCartQuantity} from "../data/cart.js"
 import { products } from "../data/products.js"
 import { calculateShippingCost, calculateTotalBeforeTax, formatCurrency, formatTaxToPercentValue, calculateTax, calculateOrderTotal } from "./utils/money.js"
+import { addToOrders } from "../data/orders.js"
 
-refreshCheckoutQuantity()
+refreshCartQuantity('.js-checkout-quantity')
 displayCartCardsHTML()
 displayPaymentSummaryHTML()
 setupDeleteLinks()
@@ -10,11 +11,8 @@ setupUpdateLinks()
 setupSaveLinks()
 setupPressEnterInputSave()
 setupShippingLinks()
+setupPlaceOrderButton()
 
-function refreshCheckoutQuantity(){
-  const checkoutQuantityEl = document.querySelector('.js-checkout-quantity')
-  checkoutQuantityEl.textContent = calculateTotalCartQuantity()
-}
 
 function displayCartCardsHTML(){
   let cartCardsHTML = ''
@@ -264,7 +262,7 @@ function setupPressEnterInputSave(){
 function setupPlaceOrderButton(){
   document.querySelector('.js-place-order-button').addEventListener('click', () => {
     console.log("fun")
-    //addToOrders(cart)
+    addToOrders(cart)
     //location.href="./orders.html"
   })
 }

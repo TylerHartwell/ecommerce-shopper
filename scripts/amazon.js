@@ -1,17 +1,12 @@
-import {addToCart, calculateTotalCartQuantity} from "../data/cart.js"
+import {addToCart, refreshCartQuantity} from "../data/cart.js"
 import {products} from "../data/products.js"
 import {formatCurrency} from "./utils/money.js"
 
 const addedToCartTimeouts = {}
 
-refreshCartQuantity()
+refreshCartQuantity('.js-cart-quantity')
 displayProductsHTML()
 setupAddToCartButtons()
-
-function refreshCartQuantity(){
-    const cartQuantityEl = document.querySelector('.js-cart-quantity')
-    cartQuantityEl.textContent = calculateTotalCartQuantity()
-}
 
 function displayProductsHTML(){
     let productsHTML = ''
