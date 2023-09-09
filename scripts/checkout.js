@@ -1,3 +1,5 @@
+//need to refresh cart quantity in order summary
+
 import {updateQuantity, calculateTotalCartQuantity, cart, removeFromCart, calculateOrderSubtotal, updateShipping, refreshCartQuantity} from "../data/cart.js"
 import { products } from "../data/products.js"
 import { calculateShippingCost, calculateTotalBeforeTax, formatCurrency, formatTaxToPercentValue, calculateTax, calculateOrderTotal } from "./utils/money.js"
@@ -206,7 +208,7 @@ function setupDeleteLinks(){
       const container = document.querySelector(`.js-cart-item-container-${productId}`)
       removeFromCart(productId)
       container.remove()
-      refreshCheckoutQuantity()
+      refreshCartQuantity('.js-checkout-quantity')
       refreshPaymentSummary()
     })
   })
@@ -232,7 +234,7 @@ function setupSaveLinks(){
       const newQuantity = Number(quantityInput.value)
       if(newQuantity > 0 && newQuantity < 1000){
         updateQuantity(productId, newQuantity)
-        refreshCheckoutQuantity()
+        refreshCartQuantity('.js-checkout-quantity')
         refreshPaymentSummary()
         const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`)
         quantityLabel.textContent = newQuantity
@@ -240,7 +242,7 @@ function setupSaveLinks(){
       if(newQuantity === 0){
         removeFromCart(productId)
         container.remove()
-        refreshCheckoutQuantity()
+        refreshCartQuantity('.js-checkout-quantity')
         refreshPaymentSummary()
       }
     })

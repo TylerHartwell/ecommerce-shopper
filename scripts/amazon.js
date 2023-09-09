@@ -70,7 +70,7 @@ function setupAddToCartButtons(){
         button.addEventListener('click', () => {
             const {productId} = button.dataset
             addToCart(productId)
-            refreshCartQuantity()
+            refreshCartQuantity('.js-cart-quantity')
             popupAddedMessage(productId)
         })
     })
