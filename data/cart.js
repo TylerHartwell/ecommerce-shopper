@@ -5,6 +5,10 @@ if(!cart) {
   cart = []
   saveToStorage()
 }
+export function clearCart(){
+  cart = []
+  saveToStorage()
+}
 
 function saveToStorage(){
   localStorage.setItem('cart', JSON.stringify(cart))

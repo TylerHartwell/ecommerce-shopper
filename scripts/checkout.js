@@ -1,6 +1,4 @@
-//need to refresh cart quantity in order summary
-
-import {updateQuantity, calculateTotalCartQuantity, cart, removeFromCart, calculateOrderSubtotal, updateShipping, refreshCartQuantity} from "../data/cart.js"
+import {updateQuantity, calculateTotalCartQuantity, cart, removeFromCart, calculateOrderSubtotal, updateShipping, refreshCartQuantity, clearCart} from "../data/cart.js"
 import { products } from "../data/products.js"
 import { calculateShippingCost, calculateTotalBeforeTax, formatCurrency, formatTaxToPercentValue, calculateTax, calculateOrderTotal } from "./utils/money.js"
 import { addToOrders } from "../data/orders.js"
@@ -265,6 +263,7 @@ function setupPlaceOrderButton(){
   document.querySelector('.js-place-order-button').addEventListener('click', () => {
     console.log("fun")
     addToOrders(cart)
-    //location.href="./orders.html"
+    clearCart()
+    window.location.href="./history.html"
   })
 }
