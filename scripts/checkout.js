@@ -216,7 +216,9 @@ function setupDeleteLinks(){
       container.remove()
       refreshCartQuantity()
       refreshPaymentSummary()
-      displayCartCardsHTML()
+      if(cart.length < 1){
+        displayCartCardsHTML()
+      }
     })
   })
 }
@@ -241,16 +243,13 @@ function setupSaveLinks(){
       const newQuantity = Number(quantityInput.value)
       if(newQuantity > 0 && newQuantity < 1000){
         updateQuantity(productId, newQuantity)
-        refreshCartQuantity('.js-checkout-quantity')
+        refreshCartQuantity()
         refreshPaymentSummary()
         const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`)
         quantityLabel.textContent = newQuantity
       }
       if(newQuantity === 0){
-        removeFromCart(productId)
-        container.remove()
-        refreshCartQuantity()
-        refreshPaymentSummary()
+        document.querySelector(`.js-delete-link[data-product-id="${productId}"]`).click()
       }
     })
   })
