@@ -2,8 +2,7 @@ export let cart = JSON.parse(localStorage.getItem('cart'))
 import {products} from "./products.js"
 
 if(!cart) {
-  cart = []
-  saveToStorage()
+  clearCart()
 }
 export function clearCart(){
   cart = []

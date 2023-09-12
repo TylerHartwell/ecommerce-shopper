@@ -17,6 +17,7 @@ setupPlaceOrderButton()
 function displayCartCardsHTML(){
   let cartCardsHTML = ''
 
+  //swap out empty cart class="cart-item-container"
   if(cart.length < 1){
     cartCardsHTML += `
       <div class="cart-item-container">

@@ -1,41 +1,58 @@
 import { refreshCartQuantity } from "../data/cart.js"
-import { orders } from "../data/orders.js"
+import { orders, removeFromOrders } from "../data/orders.js"
 import { products } from "../data/products.js"
 
 
 refreshCartQuantity()
 displayOrdersHTML()
+setupDeleteLinks()
 
 function displayOrdersHTML() {
   let ordersHTML = ''
-  orders.forEach(order => {
+
+  //make style for class="order-none"
+  if(orders.length < 1){
     ordersHTML += `
-      <div class="order-container">
-
-        <div class="order-header">
-          <div class="order-header-left-section">
-            <div class="order-date">
-              <div class="order-header-label">Order Placed:</div>
-              <div>${order.datePlaced}</div>
-            </div>
-            <div class="order-total">
-              <div class="order-header-label">Total:</div>
-              <div>${order.total}</div>
-            </div>
-          </div>
-
-          <div class="order-header-right-section">
-            <div class="order-header-label">Order ID:</div>
-            <div>${order.orderId}</div>
-          </div>
-        </div>
-
-        <div class="order-details-grid js-order-details-grid">
-          ${displayOrderCardsHTML(order)}
-        </div>
+      <div class="order-none">
+        <div>You haven't placed any orders yet.</div>
       </div>
     `
-})
+  }else {
+    orders.forEach(order => {
+      ordersHTML += `
+        <div class="order-container js-order-container-${order.orderId}">
+  
+          <div class="order-header">
+            <div class="order-header-left-section">
+              <div class="order-date">
+                <div class="order-header-label">Order Placed:</div>
+                <div>${order.datePlaced}</div>
+              </div>
+              <div class="order-total">
+                <div class="order-header-label">Total:</div>
+                <div>${order.total}</div>
+              </div>
+            </div>
+  
+            <div class="order-header-right-section">
+              <div class="order-header-label">Order ID:</div>
+              <div>${order.orderId}</div>
+            </div>
+          </div>
+  
+          <div class="order-details-grid js-order-details-grid">
+            ${displayOrderCardsHTML(order)}
+          </div>
+
+          <div>
+            <button class="button-delete js-delete-order-button" data-order-id="${order.orderId}">
+            Delete order from history
+            </button>
+          </div>
+        </div>
+      `
+    })
+  }
   document.querySelector('.js-orders-grid').innerHTML = ordersHTML
 }
 
@@ -82,4 +99,18 @@ function displayOrderCardsHTML(order){
     `
   })
   return orderCardsHTML
+}
+
+function setupDeleteLinks(){
+  document.querySelectorAll('.js-delete-order-button').forEach(link => {
+    link.addEventListener('click', () => {
+      const {orderId} = link.dataset
+      const container = document.querySelector(`.js-order-container-${orderId}`)
+      removeFromOrders(orderId)
+      container.remove()
+      if(orders.length < 1){
+        displayOrdersHTML()
+      }
+    })
+  })
 }

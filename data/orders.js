@@ -1,5 +1,4 @@
 export let orders = JSON.parse(localStorage.getItem('orders'))
-import { formatCurrency } from '../scripts/utils/money.js';
 
 if(!orders) {
   orders = []
@@ -26,5 +25,10 @@ export function addToOrders(cart){
 
 function generateOrderID(){
   return crypto.randomUUID();
+}
+
+export function removeFromOrders(orderId) {
+  orders = orders.filter(order => order.orderId !== orderId)
+  saveToStorage()
 }
 
