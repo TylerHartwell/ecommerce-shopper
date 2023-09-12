@@ -16,102 +16,110 @@ setupPlaceOrderButton()
 
 function displayCartCardsHTML(){
   let cartCardsHTML = ''
-  cart.forEach(cartItem => {
-    const productId = cartItem.productId
-    let matchingProduct
-  
-    products.forEach(product => {
-      if(product.id === productId) {
-        matchingProduct = product
-      }
-    })
-  
+
+  if(cart.length < 1){
     cartCardsHTML += `
-      <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
-        <div class="delivery-date">
-          Delivery date: Tuesday, June 21
-        </div>
-  
-        <div class="cart-item-details-grid">
-          <img class="product-image"
-            src="${matchingProduct.image}">
-  
-          <div class="cart-item-details">
-            <div class="product-name">
-              ${matchingProduct.name}
-            </div>
-            <div class="product-price">
-              $${formatCurrency(matchingProduct.priceCents)}
-            </div>
-            <div class="product-quantity">
-              <span>
-                Quantity: <span class="quantity-label js-quantity-label-${matchingProduct.id}">${cartItem.quantity}</span>
-              </span>
-              <span class="update-quantity-link link-primary js-update-link" data-product-id="${matchingProduct.id}">
-                Update
-              </span>
-              <input class="quantity-input js-quantity-input" data-product-id="${matchingProduct.id}">
-              <span class="save-quantity-link link-primary js-save-link" data-product-id="${matchingProduct.id}">
-                Save
-              </span>
-              <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingProduct.id}">
-                Delete
-              </span>
-            </div>
-          </div>
-  
-          <div class="delivery-options">
-            <div class="delivery-options-title">
-              Choose a delivery option:
-            </div>
-            <div class="delivery-option js-delivery-option-container">
-              <input type="radio" ${cartItem.priority === "low" ? "checked" : ""}
-                class="delivery-option-input js-delivery-option-input"
-                name="delivery-option-${matchingProduct.id}"
-                value="low" data-product-id="${matchingProduct.id}">
-              <div>
-                <div class="delivery-option-date">
-                  Tuesday, June 21
-                </div>
-                <div class="delivery-option-price">
-                  ${calculateShippingCost("low") === 0 ? "FREE" : "$" + formatCurrency(calculateShippingCost("low")) + " -"} Shipping
-                </div>
-              </div>
-            </div>
-            <div class="delivery-option js-delivery-option-container">
-              <input type="radio" ${cartItem.priority === "medium" ? "checked" : ""}
-                class="delivery-option-input js-delivery-option-input"
-                name="delivery-option-${matchingProduct.id}"
-                value="medium" data-product-id="${matchingProduct.id}">
-              <div>
-                <div class="delivery-option-date">
-                  Wednesday, June 15
-                </div>
-                <div class="delivery-option-price">
-                $${formatCurrency(calculateShippingCost("medium"))} - Shipping
-                </div>
-              </div>
-            </div>
-            <div class="delivery-option js-delivery-option-container">
-              <input type="radio" ${cartItem.priority === "high" ? "checked" : ""}
-                class="delivery-option-input js-delivery-option-input"
-                name="delivery-option-${matchingProduct.id}"
-                value="high" data-product-id="${matchingProduct.id}">
-              <div>
-                <div class="delivery-option-date">
-                  Monday, June 13
-                </div>
-                <div class="delivery-option-price">
-                  $${formatCurrency(calculateShippingCost("high"))} - Shipping
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="cart-item-container">
+        <div>Your cart is empty.</div>
       </div>
     `
-  })
-  
+  } else {
+    cart.forEach(cartItem => {
+      const productId = cartItem.productId
+      let matchingProduct
+    
+      products.forEach(product => {
+        if(product.id === productId) {
+          matchingProduct = product
+        }
+      })
+    
+      cartCardsHTML += `
+        <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
+          <div class="delivery-date">
+            Delivery date: Tuesday, June 21
+          </div>
+    
+          <div class="cart-item-details-grid">
+            <img class="product-image"
+              src="${matchingProduct.image}">
+    
+            <div class="cart-item-details">
+              <div class="product-name">
+                ${matchingProduct.name}
+              </div>
+              <div class="product-price">
+                $${formatCurrency(matchingProduct.priceCents)}
+              </div>
+              <div class="product-quantity">
+                <span>
+                  Quantity: <span class="quantity-label js-quantity-label-${matchingProduct.id}">${cartItem.quantity}</span>
+                </span>
+                <span class="update-quantity-link link-primary js-update-link" data-product-id="${matchingProduct.id}">
+                  Update
+                </span>
+                <input class="quantity-input js-quantity-input" data-product-id="${matchingProduct.id}">
+                <span class="save-quantity-link link-primary js-save-link" data-product-id="${matchingProduct.id}">
+                  Save
+                </span>
+                <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingProduct.id}">
+                  Delete
+                </span>
+              </div>
+            </div>
+    
+            <div class="delivery-options">
+              <div class="delivery-options-title">
+                Choose a delivery option:
+              </div>
+              <div class="delivery-option js-delivery-option-container">
+                <input type="radio" ${cartItem.priority === "low" ? "checked" : ""}
+                  class="delivery-option-input js-delivery-option-input"
+                  name="delivery-option-${matchingProduct.id}"
+                  value="low" data-product-id="${matchingProduct.id}">
+                <div>
+                  <div class="delivery-option-date">
+                    Tuesday, June 21
+                  </div>
+                  <div class="delivery-option-price">
+                    ${calculateShippingCost("low") === 0 ? "FREE" : "$" + formatCurrency(calculateShippingCost("low")) + " -"} Shipping
+                  </div>
+                </div>
+              </div>
+              <div class="delivery-option js-delivery-option-container">
+                <input type="radio" ${cartItem.priority === "medium" ? "checked" : ""}
+                  class="delivery-option-input js-delivery-option-input"
+                  name="delivery-option-${matchingProduct.id}"
+                  value="medium" data-product-id="${matchingProduct.id}">
+                <div>
+                  <div class="delivery-option-date">
+                    Wednesday, June 15
+                  </div>
+                  <div class="delivery-option-price">
+                  $${formatCurrency(calculateShippingCost("medium"))} - Shipping
+                  </div>
+                </div>
+              </div>
+              <div class="delivery-option js-delivery-option-container">
+                <input type="radio" ${cartItem.priority === "high" ? "checked" : ""}
+                  class="delivery-option-input js-delivery-option-input"
+                  name="delivery-option-${matchingProduct.id}"
+                  value="high" data-product-id="${matchingProduct.id}">
+                <div>
+                  <div class="delivery-option-date">
+                    Monday, June 13
+                  </div>
+                  <div class="delivery-option-price">
+                    $${formatCurrency(calculateShippingCost("high"))} - Shipping
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+    })
+  }
   document.querySelector('.js-order-summary').innerHTML = cartCardsHTML
 }
 
@@ -208,6 +216,7 @@ function setupDeleteLinks(){
       container.remove()
       refreshCartQuantity()
       refreshPaymentSummary()
+      displayCartCardsHTML()
     })
   })
 }
