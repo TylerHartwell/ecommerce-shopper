@@ -16,7 +16,7 @@ export function addToOrders(cart){
     {
       cart,
       orderId: generateOrderID(),
-      total: `${formatCurrency(0)}`,
+      total: `${document.querySelector('.js-order-total').textContent}`,
       datePlaced: new Date().toJSON().slice(0, 10),
       dateArrival: "2023-12-25"
     }

@@ -20,7 +20,7 @@ function displayOrdersHTML() {
             </div>
             <div class="order-total">
               <div class="order-header-label">Total:</div>
-              <div>$${order.total}</div>
+              <div>${order.total}</div>
             </div>
           </div>
 
