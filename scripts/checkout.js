@@ -38,7 +38,7 @@ function displayCartCardsHTML(){
       cartCardsHTML += `
         <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
           <div class="delivery-date">
-            Delivery date: Tuesday, June 21
+            Delivery date: <span class="js-delivery-date-${matchingProduct.id}">Tuesday, June 21</span>
           </div>
     
           <div class="cart-item-details-grid">
@@ -79,7 +79,7 @@ function displayCartCardsHTML(){
                   name="delivery-option-${matchingProduct.id}"
                   value="low" data-product-id="${matchingProduct.id}">
                 <div>
-                  <div class="delivery-option-date">
+                  <div class="delivery-option-date js-delivery-option-date-low-${matchingProduct.id}">
                     Tuesday, June 21
                   </div>
                   <div class="delivery-option-price">
@@ -93,7 +93,7 @@ function displayCartCardsHTML(){
                   name="delivery-option-${matchingProduct.id}"
                   value="medium" data-product-id="${matchingProduct.id}">
                 <div>
-                  <div class="delivery-option-date">
+                  <div class="delivery-option-date js-delivery-option-date-medium-${matchingProduct.id}">
                     Wednesday, June 15
                   </div>
                   <div class="delivery-option-price">
@@ -107,7 +107,7 @@ function displayCartCardsHTML(){
                   name="delivery-option-${matchingProduct.id}"
                   value="high" data-product-id="${matchingProduct.id}">
                 <div>
-                  <div class="delivery-option-date">
+                  <div class="delivery-option-date js-delivery-option-date-high-${matchingProduct.id}">
                     Monday, June 13
                   </div>
                   <div class="delivery-option-price">
@@ -122,6 +122,7 @@ function displayCartCardsHTML(){
     })
   }
   document.querySelector('.js-order-summary').innerHTML = cartCardsHTML
+  setSelectedDeliveryDate()
 }
 
 function displayPaymentSummaryHTML(){
@@ -204,6 +205,7 @@ function setupShippingLinks(){
       const {productId} = radioEl.dataset
       refreshPaymentSummary()
       updateShipping(productId, radioEl.value)
+      setSelectedDeliveryDate()
     })
   })
 }
@@ -274,5 +276,13 @@ function setupPlaceOrderButton(){
     addToOrders(cart)
     clearCart()
     window.location.href="./history.html"
+  })
+}
+
+function setSelectedDeliveryDate(){
+  cart.forEach(cartItem => {
+    const productId = cartItem.productId
+    const selectedDateText =  document.querySelector(`.js-delivery-option-date-${cartItem.priority}-${productId}`).textContent
+    document.querySelector(`.js-delivery-date-${productId}`).textContent = selectedDateText
   })
 }
