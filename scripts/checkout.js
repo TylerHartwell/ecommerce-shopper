@@ -14,6 +14,12 @@ setupShippingLinks()
 setupPlaceOrderButton()
 
 
+function addDays(date, days) {
+  const dateCopy = new Date(date)
+  dateCopy.setDate(date.getDate() + days);
+  return dateCopy;
+}
+
 function displayCartCardsHTML(){
   let cartCardsHTML = ''
 
@@ -28,7 +34,11 @@ function displayCartCardsHTML(){
     cart.forEach(cartItem => {
       const productId = cartItem.productId
       let matchingProduct
-    
+      const date = new Date()
+      const dateToday = date.toJSON().slice(0, 10)
+      const dateTomorrow = addDays(date, 1).toJSON().slice(0, 10)
+      const datePlusTwo = addDays(date, 2).toJSON().slice(0, 10)
+      const datePlusFive = addDays(date, 5).toJSON().slice(0, 10)
       products.forEach(product => {
         if(product.id === productId) {
           matchingProduct = product
@@ -80,7 +90,7 @@ function displayCartCardsHTML(){
                   value="low" data-product-id="${matchingProduct.id}">
                 <div>
                   <div class="delivery-option-date js-delivery-option-date-low-${matchingProduct.id}">
-                    Tuesday, June 21
+                    ${datePlusFive}
                   </div>
                   <div class="delivery-option-price">
                     ${calculateShippingCost("low") === 0 ? "FREE" : "$" + formatCurrency(calculateShippingCost("low")) + " -"} Shipping
@@ -94,7 +104,7 @@ function displayCartCardsHTML(){
                   value="medium" data-product-id="${matchingProduct.id}">
                 <div>
                   <div class="delivery-option-date js-delivery-option-date-medium-${matchingProduct.id}">
-                    Wednesday, June 15
+                    ${datePlusTwo}
                   </div>
                   <div class="delivery-option-price">
                   $${formatCurrency(calculateShippingCost("medium"))} - Shipping
@@ -108,7 +118,7 @@ function displayCartCardsHTML(){
                   value="high" data-product-id="${matchingProduct.id}">
                 <div>
                   <div class="delivery-option-date js-delivery-option-date-high-${matchingProduct.id}">
-                    Monday, June 13
+                    ${dateTomorrow}
                   </div>
                   <div class="delivery-option-price">
                     $${formatCurrency(calculateShippingCost("high"))} - Shipping
