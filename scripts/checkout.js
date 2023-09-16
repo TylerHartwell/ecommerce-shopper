@@ -34,7 +34,9 @@ function displayCartCardsHTML(){
     cart.forEach(cartItem => {
       const productId = cartItem.productId
       let matchingProduct
-      const date = new Date()
+      const utcDate = new Date()
+      const timezoneOffsetMinutes = utcDate.getTimezoneOffset();
+      const date = new Date(utcDate.getTime() - (timezoneOffsetMinutes * 60 * 1000));
       const dateToday = date.toJSON().slice(0, 10)
       const dateTomorrow = addDays(date, 1).toJSON().slice(0, 10)
       const datePlusTwo = addDays(date, 2).toJSON().slice(0, 10)
