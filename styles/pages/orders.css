@@ -56,6 +56,20 @@
   flex-shrink: 1;
 }
 
+.button-delete {
+  background-color: rgba(240, 138, 4, 0.356);
+  color: rgb(10, 0, 0);
+  border-style: none;
+  border-radius:6px;
+  padding: 6px 12px;
+}
+
+.button-delete:hover {
+  background-color: rgb(240, 136, 4);
+  font-weight: bold;
+  padding: 6px 10px;
+}
+
 @media (max-width: 575px) {
   .order-header {
     flex-direction: column;
