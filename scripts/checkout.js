@@ -1,3 +1,6 @@
+//update date format
+//connect tracking
+//style order delete button
 import {updateQuantity, calculateTotalCartQuantity, cart, removeFromCart, calculateOrderSubtotal, updateShipping, refreshCartQuantity, clearCart} from "../data/cart.js"
 import { products } from "../data/products.js"
 import { calculateShippingCost, calculateTotalBeforeTax, formatCurrency, formatTaxToPercentValue, calculateTax, calculateOrderTotal } from "./utils/money.js"
