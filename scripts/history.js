@@ -78,7 +78,7 @@ function displayOrderCardsHTML(order){
           ${matchingProduct.name}
         </div>
         <div class="product-delivery-date">
-          Arriving on: ${order.dateArrival}
+          Arriving on: ${cartItem.dateArrival}
         </div>
         <div class="product-quantity">
           Quantity: ${cartItem.quantity}

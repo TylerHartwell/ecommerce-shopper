@@ -299,5 +299,6 @@ function setSelectedDeliveryDate(){
     const productId = cartItem.productId
     const selectedDateText =  document.querySelector(`.js-delivery-option-date-${cartItem.priority}-${productId}`).textContent
     document.querySelector(`.js-delivery-date-${productId}`).textContent = selectedDateText
+    cartItem.dateArrival = selectedDateText
   })
 }

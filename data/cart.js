@@ -43,7 +43,8 @@ export function addToCart(productId){
     {
       productId,
       quantity: addQuantity,
-      priority: "low"
+      priority: "low",
+      dateArrival: "2023-12-12"
     }
   )
   saveToStorage()

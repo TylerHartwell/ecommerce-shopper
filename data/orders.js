@@ -16,8 +16,7 @@ export function addToOrders(cart){
       cart,
       orderId: generateOrderID(),
       total: `${document.querySelector('.js-order-total').textContent}`,
-      datePlaced: new Date().toJSON().slice(0, 10),
-      dateArrival: "2023-12-25"
+      datePlaced: new Date().toJSON().slice(0, 10)
     }
   )
   saveToStorage()
