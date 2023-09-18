@@ -57,7 +57,7 @@
 }
 
 .button-delete {
-  background-color: rgba(240, 138, 4, 0.356);
+  background-color: rgba(213, 217, 217, 0.705);
   color: rgb(10, 0, 0);
   border-style: none;
   border-radius:6px;
@@ -65,9 +65,9 @@
 }
 
 .button-delete:hover {
-  background-color: rgb(240, 136, 4);
+  background-color: rgb(255 44 44 / 80%);
   font-weight: bold;
-  padding: 6px 10px;
+  padding: 6px 11px;
 }
 
 @media (max-width: 575px) {
