@@ -28,9 +28,13 @@ export function calculateTotalCartQuantity(){
   return cartQuantity
 }
 
-export function addToCart(productId){
-  const quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`)
-  const addQuantity = Number(quantitySelector.value)
+export function addToCart(productId, qty){
+  let addQuantity = qty
+  if(!qty){
+    const quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`)
+    addQuantity = Number(quantitySelector.value)
+  }
+
   let matchingItem
   cart.forEach(cartItem => {
       if(productId === cartItem.productId){

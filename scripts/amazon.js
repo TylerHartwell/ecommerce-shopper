@@ -69,7 +69,7 @@ function setupAddToCartButtons(){
     document.querySelectorAll(`.js-add-to-cart`).forEach(button => {
         button.addEventListener('click', () => {
             const {productId} = button.dataset
-            addToCart(productId)
+            addToCart(productId, null)
             refreshCartQuantity()
             popupAddedMessage(productId)
         })

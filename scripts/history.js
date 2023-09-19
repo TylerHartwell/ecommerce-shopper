@@ -1,10 +1,11 @@
-import { refreshCartQuantity } from "../data/cart.js"
+import { addToCart, refreshCartQuantity } from "../data/cart.js"
 import { orders, removeFromOrders } from "../data/orders.js"
 import { products } from "../data/products.js"
 
 
 refreshCartQuantity()
 displayOrdersHTML()
+setupBuyAgainButtons()
 setupDeleteLinks()
 
 function displayOrdersHTML() {
@@ -83,7 +84,7 @@ function displayOrderCardsHTML(order){
         <div class="product-quantity">
           Quantity: ${cartItem.quantity}
         </div>
-        <button class="buy-again-button button-primary">
+        <button class="buy-again-button button-primary js-buy-again-button" data-product-id="${matchingProduct.id}">
           <img class="buy-again-icon" src="images/icons/buy-again.png">
           <span class="buy-again-message">Buy it again</span>
         </button>
@@ -99,6 +100,16 @@ function displayOrderCardsHTML(order){
     `
   })
   return orderCardsHTML
+}
+
+function setupBuyAgainButtons(){
+  document.querySelectorAll(`.js-buy-again-button`).forEach(button => {
+      button.addEventListener('click', () => {
+          const {productId} = button.dataset
+          addToCart(productId, 1)
+          refreshCartQuantity()
+      })
+  })
 }
 
 function setupDeleteLinks(){
