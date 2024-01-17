@@ -34,12 +34,6 @@ setupPressEnterInputSave()
 setupShippingLinks()
 setupPlaceOrderButton()
 
-function addDays(date, days) {
-  const dateCopy = new Date(date)
-  dateCopy.setDate(date.getDate() + days)
-  return dateCopy
-}
-
 function displayCartCardsHTML() {
   let cartCardsHTML = ""
 
@@ -53,32 +47,11 @@ function displayCartCardsHTML() {
   } else {
     cart.forEach(cartItem => {
       const productId = cartItem.productId
-      let matchingProduct
-      const utcDate = new Date()
-      const timezoneOffsetMinutes = utcDate.getTimezoneOffset()
-      const date = new Date(
-        utcDate.getTime() - timezoneOffsetMinutes * 60 * 1000
-      )
-      const dateToday = date.toJSON().slice(0, 10)
-      const dateTomorrow = addDays(date, 1).toJSON().slice(0, 10)
-      const datePlusTwo = addDays(date, 2).toJSON().slice(0, 10)
-      const datePlusFive = addDays(date, 5).toJSON().slice(0, 10)
-      products.forEach(product => {
-        if (product.id === productId) {
-          matchingProduct = product
-        }
-      })
-
+      const matchingProduct = products.find(product => product.id === productId)
       const deliveryOptionPriority = cartItem.priority
-
-      let deliveryOption
-
-      deliveryOptions.forEach(option => {
-        if (option.priority === deliveryOptionPriority) {
-          deliveryOption = option
-        }
-      })
-
+      const deliveryOption = deliveryOptions.find(
+        option => option.priority === deliveryOptionPriority
+      )
       const today = dayjs()
       const deliveryDate = today.add(deliveryOption.deliveryDays, "days")
       const dateString = deliveryDate.format("dddd, MMMM D")
@@ -161,19 +134,21 @@ function deliveryOptionsHTML(matchingProduct, cartItem) {
     const isChecked = deliveryOption.priority === cartItem.priority
 
     html += `
-      <div class="delivery-option js-delivery-option-container">
+      <div class="delivery-option js-delivery-option">
         <input type="radio" ${isChecked ? "checked" : ""}
           class="delivery-option-input js-delivery-option-input"
           name="delivery-option-${matchingProduct.id}"
-          value="low" data-product-id="${matchingProduct.id}">
+          value="${deliveryOption.priority}" data-product-id="${
+      matchingProduct.id
+    }">
         <div>
-          <div class="delivery-option-date js-delivery-option-date-low-${
-            matchingProduct.id
-          }">
+          <div class="delivery-option-date js-delivery-option-date-${
+            deliveryOption.priority
+          }-${matchingProduct.id}">
             ${dateString}
           </div>
           <div class="delivery-option-price">
-            ${priceString} ShippingZ
+            ${priceString} Shipping
           </div>
         </div>
       </div>
@@ -256,9 +231,9 @@ function calculateShippingAndHandlingTotal() {
 }
 
 function setupShippingLinks() {
-  document.querySelectorAll(".js-delivery-option-container").forEach(link => {
-    link.addEventListener("click", () => {
-      const radioEl = link.querySelector(".js-delivery-option-input")
+  document.querySelectorAll(".js-delivery-option").forEach(element => {
+    element.addEventListener("click", () => {
+      const radioEl = element.querySelector(".js-delivery-option-input")
       radioEl.checked = true
       const { productId } = radioEl.dataset
       refreshPaymentSummary()
