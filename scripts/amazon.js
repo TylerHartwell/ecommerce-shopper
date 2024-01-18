@@ -1,17 +1,15 @@
-import {addToCart, refreshCartQuantity} from "../data/cart.js"
-import {products} from "../data/products.js"
-import {formatCurrency} from "./utils/money.js"
+import { addToCart } from "../data/cart.js"
+import { products } from "../data/products.js"
+import { formatCurrency } from "./utils/money.js"
 
 const addedToCartTimeouts = {}
 
-refreshCartQuantity()
 displayProductsHTML()
-setupAddToCartButtons()
 
-function displayProductsHTML(){
-    let productsHTML = ''
-    products.forEach(product => {
-        productsHTML += `
+function displayProductsHTML() {
+  let productsHTML = ""
+  products.forEach(product => {
+    productsHTML += `
             <div class="product-container">
                 <div class="product-image-container">
                     <img class="product-image"
@@ -24,7 +22,9 @@ function displayProductsHTML(){
     
                 <div class="product-rating-container">
                     <img class="product-rating-stars"
-                        src="images/ratings/rating-${product.rating.stars*10}.png">
+                        src="images/ratings/rating-${
+                          product.rating.stars * 10
+                        }.png">
                     <div class="product-rating-count link-primary">
                         ${product.rating.count}
                     </div>
@@ -56,35 +56,35 @@ function displayProductsHTML(){
                     Added
                 </div>
     
-                <button class="add-to-cart-button button-primary js-add-to-cart" data-product-id="${product.id}">
+                <button class="add-to-cart-button button-primary js-add-to-cart" data-product-id="${
+                  product.id
+                }">
                     Add to Cart
                 </button>
             </div>
         `
+  })
+  document.querySelector(`.js-products-grid`).innerHTML = productsHTML
+
+  document.querySelectorAll(`.js-add-to-cart`).forEach(button => {
+    button.addEventListener("click", () => {
+      const { productId } = button.dataset
+      addToCart(productId, null)
+      //   refreshCartQuantity()
+      popupAddedMessage(productId)
     })
-    document.querySelector(`.js-products-grid`).innerHTML = productsHTML
+  })
 }
 
-function setupAddToCartButtons(){
-    document.querySelectorAll(`.js-add-to-cart`).forEach(button => {
-        button.addEventListener('click', () => {
-            const {productId} = button.dataset
-            addToCart(productId, null)
-            refreshCartQuantity()
-            popupAddedMessage(productId)
-        })
-    })
-}
-
-function popupAddedMessage(productId){
-    const addedToCartEl = document.querySelector(`.js-added-to-cart-${productId}`)
-    const previousTimeoutId = addedToCartTimeouts[productId]
-    addedToCartEl.classList.add("opaque")
-    if(previousTimeoutId){
-        clearTimeout(previousTimeoutId)
-    }
-    const timeoutId = setTimeout(() => {
-        addedToCartEl.classList.remove("opaque")
-    }, 2000)
-    addedToCartTimeouts[productId] = timeoutId
+function popupAddedMessage(productId) {
+  const addedToCartEl = document.querySelector(`.js-added-to-cart-${productId}`)
+  const previousTimeoutId = addedToCartTimeouts[productId]
+  addedToCartEl.classList.add("opaque")
+  if (previousTimeoutId) {
+    clearTimeout(previousTimeoutId)
+  }
+  const timeoutId = setTimeout(() => {
+    addedToCartEl.classList.remove("opaque")
+  }, 2000)
+  addedToCartTimeouts[productId] = timeoutId
 }

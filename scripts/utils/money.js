@@ -5,16 +5,15 @@ export function formatTaxToPercentValue() {
 }
 
 export function formatCurrency(priceCents) {
-  return (priceCents / 100).toFixed(2)
+  return (Math.round(priceCents) / 100).toFixed(2)
 }
 
 export function calculateTotalBeforeTax(subtotal, shippingTotal) {
-  const totalBeforeTax = subtotal + shippingTotal
-  return totalBeforeTax
+  return subtotal + shippingTotal
 }
 
-export function calculateTax(totalBeforeTax) {
-  return totalBeforeTax * taxRate
+export function calculateTax(cents) {
+  return cents * taxRate
 }
 
 export function calculateOrderTotal(totalBeforeTax) {

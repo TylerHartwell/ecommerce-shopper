@@ -4,8 +4,7 @@ import {
   updateQuantity,
   cart,
   removeFromCart,
-  updateShipping,
-  refreshCartQuantity
+  updateShipping
 } from "../../data/cart.js"
 import { getProduct } from "../../data/products.js"
 import { formatCurrency } from "../utils/money.js"
@@ -14,10 +13,10 @@ import {
   deliveryOptions,
   getDeliveryOption
 } from "../../data/deliveryOptions.js"
+import { renderPaymentSummary } from "./paymentSummary.js"
 
 export function renderCartSummary() {
   displayCartCardsHTML()
-  refreshCartQuantity()
   setupDeleteLinks()
   setupUpdateLinks()
   setupSaveLinks()
@@ -150,6 +149,7 @@ export function renderCartSummary() {
         const { productId } = radioEl.dataset
         updateShipping(productId, radioEl.value)
         setSelectedDeliveryDate()
+        renderPaymentSummary()
       })
     })
   }
@@ -163,10 +163,10 @@ export function renderCartSummary() {
         )
         removeFromCart(productId)
         container.remove()
-        refreshCartQuantity()
         if (cart.length < 1) {
           displayCartCardsHTML()
         }
+        renderPaymentSummary()
       })
     })
   }
@@ -197,7 +197,6 @@ export function renderCartSummary() {
         const newQuantity = Number(quantityInput.value)
         if (newQuantity > 0 && newQuantity < 1000) {
           updateQuantity(productId, newQuantity)
-          refreshCartQuantity()
           const quantityLabel = document.querySelector(
             `.js-quantity-label-${productId}`
           )
