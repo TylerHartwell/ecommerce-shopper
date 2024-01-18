@@ -1,13 +1,13 @@
-import { calculateTotalCartQuantity, cart, clearCart } from "../../data/cart.js"
-import { getProduct } from "../../data/products.js"
+import { calculateTotalCartQuantity, cart, clearCart } from "../data/cart.js"
+import { getProduct } from "../data/products.js"
 import {
   calculateTotalBeforeTax,
   formatCurrency,
   formatTaxToPercentValue,
   calculateTax
 } from "../utils/money.js"
-import { addToOrders } from "../../data/orders.js"
-import { getDeliveryOption } from "../../data/deliveryOptions.js"
+import { addToOrders } from "../data/orders.js"
+import { getDeliveryOption } from "../data/deliveryOptions.js"
 
 export function renderPaymentSummary() {
   let totalProductPriceCents = 0
