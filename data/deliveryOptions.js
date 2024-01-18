@@ -15,3 +15,9 @@ export const deliveryOptions = [
     priceCents: 999
   }
 ]
+
+export function getDeliveryOption(deliveryOptionPriority) {
+  return deliveryOptions.find(
+    option => option.priority === deliveryOptionPriority
+  )
+}

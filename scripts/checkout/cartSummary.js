@@ -7,10 +7,13 @@ import {
   updateShipping,
   refreshCartQuantity
 } from "../../data/cart.js"
-import products from "../../data/products.js"
+import { getProduct } from "../../data/products.js"
 import { formatCurrency } from "../utils/money.js"
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js"
-import { deliveryOptions } from "../../data/deliveryOptions.js"
+import {
+  deliveryOptions,
+  getDeliveryOption
+} from "../../data/deliveryOptions.js"
 
 export function renderCartSummary() {
   displayCartCardsHTML()
@@ -32,14 +35,8 @@ export function renderCartSummary() {
     `
     } else {
       cart.forEach(cartItem => {
-        const productId = cartItem.productId
-        const matchingProduct = products.find(
-          product => product.id === productId
-        )
-        const deliveryOptionPriority = cartItem.priority
-        const deliveryOption = deliveryOptions.find(
-          option => option.priority === deliveryOptionPriority
-        )
+        const matchingProduct = getProduct(cartItem.productId)
+        const deliveryOption = getDeliveryOption(cartItem.priority)
         const today = dayjs()
         const deliveryDate = today.add(deliveryOption.deliveryDays, "days")
         const dateString = deliveryDate.format("dddd, MMMM D")
@@ -151,7 +148,6 @@ export function renderCartSummary() {
         const radioEl = element.querySelector(".js-delivery-option-input")
         radioEl.checked = true
         const { productId } = radioEl.dataset
-        refreshPaymentSummary()
         updateShipping(productId, radioEl.value)
         setSelectedDeliveryDate()
       })
@@ -168,7 +164,6 @@ export function renderCartSummary() {
         removeFromCart(productId)
         container.remove()
         refreshCartQuantity()
-        refreshPaymentSummary()
         if (cart.length < 1) {
           displayCartCardsHTML()
         }

@@ -4,8 +4,8 @@ import {
   clearCart,
   refreshCartQuantity
 } from "../../data/cart.js"
+import { getProduct } from "../../data/products.js"
 import {
-  calculateShippingCost,
   calculateTotalBeforeTax,
   formatCurrency,
   formatTaxToPercentValue,
@@ -13,8 +13,23 @@ import {
   calculateOrderTotal
 } from "../utils/money.js"
 import { addToOrders } from "../../data/orders.js"
+import {
+  deliveryOptions,
+  getDeliveryOption
+} from "../../data/deliveryOptions.js"
 
 export function renderPaymentSummary() {
+  let totalProductPriceCents = 0
+  let totalShippingPriceCents = 0
+
+  cart.forEach(cartItem => {
+    const product = getProduct(cartItem.productId)
+    totalProductPriceCents += product.priceCents * cartItem.quantity
+
+    const deliveryOption = getDeliveryOption(cartItem.priority)
+    totalShippingPriceCents += deliveryOption.priceCents
+  })
+
   displayPaymentSummaryHTML()
   refreshCartQuantity()
   setupPlaceOrderButton()
@@ -86,8 +101,10 @@ export function renderPaymentSummary() {
     let totalCents = 0
     document.querySelectorAll(".js-delivery-option-input").forEach(option => {
       if (option.checked) {
-        totalCents += calculateShippingCost(option.value)
+        // totalCents += calculateShippingCost(option.value)
+        totalCents += 100
       }
+      // }
     })
     return totalCents
   }
