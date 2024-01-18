@@ -14,6 +14,7 @@ import {
   getDeliveryOption
 } from "../../data/deliveryOptions.js"
 import { renderPaymentSummary } from "./paymentSummary.js"
+import { renderCheckoutHeader } from "./checkoutHeader.js"
 
 export function renderCartSummary() {
   displayCartCardsHTML()
@@ -100,7 +101,7 @@ export function renderCartSummary() {
       })
     }
     document.querySelector(".js-order-summary").innerHTML = cartCardsHTML
-    setSelectedDeliveryDate()
+    // setSelectedDeliveryDate()
   }
 
   function deliveryOptionsHTML(matchingProduct, cartItem) {
@@ -166,6 +167,7 @@ export function renderCartSummary() {
         if (cart.length < 1) {
           displayCartCardsHTML()
         }
+        renderCheckoutHeader()
         renderPaymentSummary()
       })
     })
@@ -207,6 +209,8 @@ export function renderCartSummary() {
             .querySelector(`.js-delete-link[data-product-id="${productId}"]`)
             .click()
         }
+        renderCheckoutHeader()
+        renderPaymentSummary()
       })
     })
   }

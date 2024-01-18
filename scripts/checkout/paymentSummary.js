@@ -35,35 +35,35 @@ export function renderPaymentSummary() {
 
     <div class="payment-summary-row">
       <div>Items (<span class="js-cart-quantity">${calculateTotalCartQuantity()}</span>):</div>
-      <div class="payment-summary-money js-payment-summary-subtotal">${formatCurrency(
+      <div class="payment-summary-money js-payment-summary-subtotal">$${formatCurrency(
         totalProductPriceCents
       )}</div>
     </div>
 
     <div class="payment-summary-row">
       <div>Shipping &amp; handling:</div>
-      <div class="payment-summary-money js-shipping-and-handling-total">${formatCurrency(
+      <div class="payment-summary-money js-shipping-and-handling-total">$${formatCurrency(
         totalShippingPriceCents
       )}</div>
     </div>
 
     <div class="payment-summary-row subtotal-row">
       <div>Total before tax:</div>
-      <div class="payment-summary-money js-pre-tax-total">${formatCurrency(
+      <div class="payment-summary-money js-pre-tax-total">$${formatCurrency(
         totalBeforeTax
       )}</div>
     </div>
 
     <div class="payment-summary-row">
       <div>Estimated tax (${formatTaxToPercentValue()}%):</div>
-      <div class="payment-summary-money js-tax">${formatCurrency(
+      <div class="payment-summary-money js-tax">$${formatCurrency(
         totalTax
       )}</div>
     </div>
 
     <div class="payment-summary-row total-row">
       <div>Order total:</div>
-      <div class="payment-summary-money js-order-total">${formatCurrency(
+      <div class="payment-summary-money js-order-total">$${formatCurrency(
         totalCents
       )}</div>
     </div>
