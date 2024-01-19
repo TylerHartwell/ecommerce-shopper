@@ -1,4 +1,4 @@
-import { addToCart, cart, loadFromStorage } from "../../scripts/data/cart"
+import { addToCart, cart, loadFromStorage } from "../../scripts/data/cart.js"
 
 describe("test suite: addToCart", () => {
   it("adds an existing product to the cart", () => {
@@ -12,6 +12,7 @@ describe("test suite: addToCart", () => {
         }
       ])
     })
+    spyOn(document, "querySelector").and.returnValue({ value: 1 })
     loadFromStorage()
     addToCart("e43638ce-6aa0-4b85-b27f-e1d07eb678c6")
     expect(cart.length).toEqual(1)
@@ -25,6 +26,7 @@ describe("test suite: addToCart", () => {
     spyOn(localStorage, "getItem").and.callFake(() => {
       return JSON.stringify([])
     })
+    spyOn(document, "querySelector").and.returnValue({ value: 1 })
     loadFromStorage()
     addToCart("e43638ce-6aa0-4b85-b27f-e1d07eb678c6")
     expect(cart.length).toEqual(1)

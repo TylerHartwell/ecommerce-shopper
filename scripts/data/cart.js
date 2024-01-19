@@ -1,5 +1,6 @@
-export let cart
 import { products } from "./products.js"
+
+export let cart
 
 loadFromStorage()
 
